@@ -43,14 +43,23 @@ jobs:
 
     - name: Check for differences
       id: differences
-      run: diff "${{ env.date_current }}.json" current.json
+      run: |
+        diff "${{ env.date_current }}.json" current.json
+        if [ $? -eq 1 ]; then
+          echo "Differences found"
+        elif [ $? -eq 0 ]; then
+          echo "No differences found"
+          exit 0
+        else
+          echo "Error running diff"
+          exit 2
 
     - name: Copy file with current date to current.json
-      if: steps.differences.outcome != 'success'
+      if: steps.differences.outcome == 'success' && steps.differences.conclusion == 'success'
       run: cp "${{ env.date_current }}.json" current.json
 
     - name: Create Pull Request
-      if: steps.differences.outcome != 'success'
+      if: steps.differences.outcome == 'success' && steps.differences.conclusion == 'success'
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ secrets.GITHUB_TOKEN }}

@@ -49,15 +49,18 @@ jobs:
 
     - name: Check for differences
       id: differences
+      shell: bash +e {0}
       run: |
         diff "list/${{ env.DATE_CURRENT }}.json" list/current.json
         EXIT_STATUS=$?
         if [ $EXIT_STATUS -eq 1 ]; then
           echo "differences=true" >> $GITHUB_OUTPUT
           echo "Differences found"
+          exit 0
         elif [ $EXIT_STATUS -eq 0 ]; then
           echo "differences=false" >> $GITHUB_OUTPUT
           echo "No differences found"
+          exit 0
         else
           echo "Unexpected error occured while running diff"
           exit $EXIT_STATUS

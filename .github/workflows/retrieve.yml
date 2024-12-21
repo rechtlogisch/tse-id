@@ -48,7 +48,7 @@ jobs:
       run: echo "DATE_CURRENT=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
     - name: Check for differences
-      id: differences
+      id: diff
       shell: bash +e {0}
       run: |
         diff "list/${{ env.DATE_CURRENT }}.json" list/current.json

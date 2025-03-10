@@ -86,3 +86,6 @@ jobs:
         add-paths: |
           list/current.json
           list/${{ env.DATE_CURRENT }}.json
+
+    - name: Health check
+      run: curl -sS $(echo ${{ secrets.HEALTHCHECK_URL }})

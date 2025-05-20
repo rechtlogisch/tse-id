@@ -1,0 +1,42 @@
+name: Scheduled Retry on Failure
+
+on:
+  schedule:
+    - cron: '1 6-20 * * 1-6' # At minute 1 past every hour from 6 through 20 on every day-of-week from Monday through Saturday
+
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the last workflow runs
+        id: runs
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'retrieve.yml',
+              per_page: 1,
+              status: 'completed'
+            });
+
+            const lastRun = runs.workflow_runs[0];
+            if (lastRun.conclusion === 'failure') {
+              core.setOutput('failed_run_id', lastRun.id);
+              core.setOutput('should_retry', 'true');
+            } else {
+              core.setOutput('should_retry', 'false');
+            }
+
+      - name: Retry the workflow
+        if: steps.runs.outputs.should_retry == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.actions.reRunWorkflow({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ steps.runs.outputs.failed_run_id }}
+            });
+            console.log(`Re-running workflow run ID: ${{ steps.runs.outputs.failed_run_id }}`);

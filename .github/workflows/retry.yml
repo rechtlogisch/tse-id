@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Get the last workflow runs
         id: runs
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const { data: runs } = await github.rest.actions.listWorkflowRunsForRepo({
@@ -31,7 +31,7 @@ jobs:
 
       - name: Retry the workflow
         if: steps.runs.outputs.should_retry == 'true'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             await github.rest.actions.reRunWorkflow({

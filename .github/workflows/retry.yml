@@ -40,3 +40,6 @@ jobs:
               run_id: ${{ steps.runs.outputs.failed_run_id }}
             });
             console.log(`Re-running workflow run ID: ${{ steps.runs.outputs.failed_run_id }}`);
+            console.log(`Last failed attempt had number: ${lastRun.run_attempt}`);
+            console.log(`Link to failed workflow: https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${{ steps.runs.outputs.failed_run_id }}`);
+

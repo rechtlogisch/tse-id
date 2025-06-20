@@ -2,7 +2,7 @@ name: Retrieve TSE list
 
 on:
   schedule:
-    - cron: '0 5 * * *'
+    - cron: '0 5,17 * * *' # At 05:00 UTC and 17:00 UTC every day
   workflow_dispatch:
 
 jobs:

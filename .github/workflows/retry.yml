@@ -22,7 +22,7 @@ jobs:
             });
 
             const lastRun = runs.workflow_runs[0];
-            if (lastRun.conclusion === 'failure') {
+            if (lastRun && lastRun.conclusion === 'failure') {
               core.setOutput('failed_run_id', lastRun.id);
               core.setOutput('should_retry', 'true');
             } else {

@@ -16,8 +16,8 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.3'
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+        php-version: '8.4'
+        extensions: dom, curl
         coverage: none
 
     - name: Cache Composer packages
@@ -30,7 +30,7 @@ jobs:
       run: |
         echo '{
           "require": {
-            "rechtlogisch/tse-id-php": "^0.1",
+            "rechtlogisch/tse-id-php": "^0.2",
             "symfony/console": "^7.2",
             "symfony/browser-kit": "^7.2",
             "symfony/css-selector": "^7.2",
@@ -39,7 +39,7 @@ jobs:
         }' > composer.json
 
     - name: Install package
-      run: composer require rechtlogisch/tse-id-php --dev --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+      run: composer require rechtlogisch/tse-id-php --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
 
     - name: Run retrieve console command
       run: vendor/bin/console tse-id:retrieve list

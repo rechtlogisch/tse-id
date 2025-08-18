@@ -11,7 +11,7 @@ Contains the [current list](list/current.json) of TSE-IDs in JSON. It stores the
 The [BSI webpage](https://www.bsi.bund.de/EN/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Zertifizierung-und-Anerkennung/Listen/Zertifizierte-Produkte-nach-TR/Technische_Sicherheitseinrichtungen/TSE_node.html?gts=913608_list%253DdateOfRevision_dt%252Bdesc&gtp=913608_list%253D1) is checked automatically every day at [5 AM UTC and 5 PM UTC](.github/workflows/retrieve.yml#L5) with the [retrieve.yml](.github/workflows/retrieve.yml) workflow.
 
 > [!NOTE]  
-> The workflow utlizes the [tse-id-php](https://github.com/rechtlogisch/tse-id-php) package.
+> The workflow utilizes the [tse-id-php](https://github.com/rechtlogisch/tse-id-php) package.
 
 ## Credits
 

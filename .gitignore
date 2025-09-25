@@ -1,7 +1,10 @@
 /.idea
 /.vscode
+/node_modules
 /vendor
 .DS_Store
 composer.json
 composer.lock
+package.json
+package-lock.json
 *.sh

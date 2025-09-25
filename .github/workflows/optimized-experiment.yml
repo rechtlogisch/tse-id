@@ -1,0 +1,60 @@
+name: Retrieve TSE list - execution time optimized experiment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  retrieve:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Cache image layers
+      uses: actions/cache@v4
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Download package-lock.json
+      run: |
+        curl -o package-lock.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package-lock.json
+
+    - name: Download Dockerfile
+      run: |
+        curl -o Dockerfile https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/Dockerfile
+
+    - name: Build image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: false
+        load: true
+        tags: tse-id:latest
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+    - name: Move cache
+      run: |
+        rm -rf /tmp/.buildx-cache
+        mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+    - name: Set current date
+      run: echo "DATE_CURRENT=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+    - name: Retrieve
+      run: |
+        docker run --rm -v $(pwd)/list:/output tse-id:latest -o /output/${{ env.DATE_CURRENT }}.json -p
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: list-${{ env.DATE_CURRENT }}-experiment
+        path: list/${{ env.DATE_CURRENT }}.json
+        retention-days: 90

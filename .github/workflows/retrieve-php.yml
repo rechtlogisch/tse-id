@@ -13,47 +13,39 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v5
 
-    - name: Use Node.js 22
-      uses: actions/setup-node@v5
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
       with:
-        node-version: '22'
-        cache: 'npm'
+        php-version: '8.4'
+        extensions: dom, curl
+        coverage: none
 
-    - name: Create package.json
-      run: |
-        echo '{
-          "dependencies": {
-            "tse-id": "^0.1"
-          }
-        }' > package.json
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Cache Playwright
+    - name: Cache Composer packages
       uses: actions/cache@v4
       with:
-        path: ~/.cache/ms-playwright
-        key: playwright-${{ hashFiles('package-lock.json') }}-22
-        restore-keys: |
-          playwright-${{ hashFiles('package-lock.json') }}-
-          playwright-
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
 
-    - name: Install Playwright
-      run: npx playwright install --with-deps chromium
+    - name: Create composer.json
+      run: |
+        echo '{
+          "require": {
+            "rechtlogisch/tse-id-php": "^0.2",
+            "symfony/console": "^7.2",
+            "symfony/browser-kit": "^7.2",
+            "symfony/css-selector": "^7.2",
+            "symfony/http-client": "^7.2"
+          }
+        }' > composer.json
+
+    - name: Install package
+      run: composer require rechtlogisch/tse-id-php --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+
+    - name: Run retrieve console command
+      run: vendor/bin/console tse-id:retrieve list
 
     - name: Set current date
       run: echo "DATE_CURRENT=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-    - name: Retrieve
-      run: npx tse-id -o list/${{ env.DATE_CURRENT }}.json -p
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: list-${{ env.DATE_CURRENT }}
-        path: list/${{ env.DATE_CURRENT }}.json
-        retention-days: 90
 
     - name: Check for differences
       id: diff

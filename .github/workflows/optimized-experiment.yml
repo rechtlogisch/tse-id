@@ -22,6 +22,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-buildx-
 
+    - name: Download package.json
+      run: |
+        curl -o package.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package.json
+
     - name: Download package-lock.json
       run: |
         curl -o package-lock.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package-lock.json

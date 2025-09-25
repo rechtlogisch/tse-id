@@ -13,19 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v5
 
-    - name: Download package.json
-      run: |
-        curl -o package.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package.json
-
-    - name: Download package-lock.json
-      run: |
-        curl -o package-lock.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package-lock.json
-
     - name: Use Node.js 22
       uses: actions/setup-node@v5
       with:
         node-version: '22'
-        cache: 'npm'
+
+    - name: Create package.json
+      run: |
+        echo '{
+          "dependencies": {
+            "tse-id": "^0.1"
+          }
+        }' > package.json
 
     - name: Install dependencies
       run: npm install

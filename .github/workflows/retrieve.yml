@@ -35,7 +35,7 @@ jobs:
         path: ~/.cache/ms-playwright
         key: playwright-${{ hashFiles('package-lock.json') }}-22
         restore-keys: |
-          playwright-${{ hashFiles('package-lock.json') }}-
+          playwright-${{ hashFiles('package-lock.json') }}-22
           playwright-
 
     - name: Install Playwright

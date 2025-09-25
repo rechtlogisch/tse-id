@@ -22,22 +22,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-buildx-
 
-    - name: Download package.json
+    - name: Create build directory
       run: |
-        curl -o package.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package.json
+        mkdir -p build
 
-    - name: Download package-lock.json
+    - name: Clone tse-id-js repository
       run: |
-        curl -o package-lock.json https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/package-lock.json
-
-    - name: Download Dockerfile
-      run: |
-        curl -o Dockerfile https://raw.githubusercontent.com/rechtlogisch/tse-id-js/main/Dockerfile
+        git clone https://github.com/rechtlogisch/tse-id-js.git build --depth 1
 
     - name: Build image
       uses: docker/build-push-action@v6
       with:
-        context: .
+        context: build
+        file: build/Dockerfile.alpine
         push: false
         load: true
         tags: tse-id:latest
@@ -54,7 +51,7 @@ jobs:
 
     - name: Retrieve
       run: |
-        docker run --rm -v $(pwd)/list:/output tse-id:latest -o /output/${{ env.DATE_CURRENT }}.json -p
+        docker run --rm -v $(pwd)/list:/output tse-id:latest node dist/cli.js -o /output/${{ env.DATE_CURRENT }}.json -p
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

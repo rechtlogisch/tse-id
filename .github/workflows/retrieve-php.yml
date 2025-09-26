@@ -1,4 +1,4 @@
-name: Retrieve TSE list (PHP)
+name: Retrieve TSE list (tse-id-php)
 
 on:
   schedule:

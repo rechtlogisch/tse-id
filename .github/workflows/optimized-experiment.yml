@@ -54,7 +54,7 @@ jobs:
         docker run --rm -v $(pwd)/list:/output tse-id:latest node dist/cli.js -o /output/${{ env.DATE_CURRENT }}.json -p
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: list-${{ env.DATE_CURRENT }}-experiment
         path: list/${{ env.DATE_CURRENT }}.json

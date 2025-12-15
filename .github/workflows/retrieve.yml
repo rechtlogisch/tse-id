@@ -48,7 +48,7 @@ jobs:
       run: npx tse-id -o list/${{ env.DATE_CURRENT }}.json -p
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: list-${{ env.DATE_CURRENT }}
         path: list/${{ env.DATE_CURRENT }}.json

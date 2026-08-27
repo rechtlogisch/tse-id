@@ -6,20 +6,6 @@
         "manufacturer": "Diebold Nixdorf Systems GmbH",
         "date_issuance": "27.04.2026"
     },
-    "0803-2026": {
-        "id": "0803",
-        "year": "2026",
-        "content": "Diebold Nixdorf TSE 2.0",
-        "manufacturer": "Diebold Nixdorf Systems GmbH",
-        "date_issuance": "18.06.2026"
-    },
-    "0802-2026": {
-        "id": "0802",
-        "year": "2026",
-        "content": "Swissbit TSE 2.0",
-        "manufacturer": "Epson UK Ltd.",
-        "date_issuance": "18.06.2026"
-    },
     "0800-2026": {
         "id": "0800",
         "year": "2026",
